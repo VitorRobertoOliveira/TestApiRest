@@ -2,16 +2,37 @@ package br.com.testApiRest.tests;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import br.com.testApiRest.core.BaseTest;
 
 public class ServeRestTest extends BaseTest {
-
+	
+	private String TOKEN;
+	
+	@Before
+	public void login() {
+		// Login com usuário válido!
+		Map<String, String> login = new HashMap<>();
+		login.put("email", "fulano@qa.com");
+		login.put("password", "teste");
+		
+		TOKEN = given()
+			.body(login)
+		.when()
+			.post("/login")
+		.then()
+			.statusCode(200)
+			.body("message", is("Login realizado com sucesso"))
+			.extract().path("token");
+	}
+	
 	/**
 	 * Trying to login incorrect credential
 	 */
@@ -66,25 +87,13 @@ public class ServeRestTest extends BaseTest {
 	 */
 	@Test
 	public void registerUsers() {
-		// Fazendo login com usuário válido
-		Map<String, String> login = new HashMap<>();
-		login.put("email", "fulano@qa.com");
-		login.put("password", "teste");
-		String token = given()
-			.body(login)
-		.when()
-			.post("/login")
-		.then()
-			.statusCode(200)
-			.body("message", is("Login realizado com sucesso"))
-			.extract().path("token");
 		
 		// Inserindo um usuário e salvando o _id em uma string
 		String _id = given()
-			.header("authorization", "Bearer " + token)
+			.header("authorization", "Bearer " + TOKEN)
 			.body("{\r\n"
 					+ "  \"nome\": \"Vitor Tester Testador\",\r\n"
-					+ "  \"email\": \"vitorotesterABCDEF@qa.com\",\r\n"
+					+ "  \"email\": \"vitorotesterksjfhksjdf@qa.com\",\r\n"
 					+ "  \"password\": \"teste@123\",\r\n"
 					+ "  \"administrador\": \"true\"\r\n"
 					+ "}")
@@ -109,13 +118,13 @@ public class ServeRestTest extends BaseTest {
 	 */
 	@Test
 	public void validatingWhetherTheUserListReturnsEmpty() {
-		given()
-		.when()
-			.get("/usuarios")
-		.then()
-			.statusCode(200)
-			.body("quantidade", is(15))
-		;			
+			given()
+			.when()
+				.get("/usuarios")
+			.then()
+				.statusCode(200)
+				.body("usuarios", not(empty()));
+		
 	}
 	
 	/**
@@ -123,22 +132,10 @@ public class ServeRestTest extends BaseTest {
 	 */
 	@Test
 	public void validateTheUserRegistrationBlockWithTheSameEmail() {
-		// Fazendo login com usuário válido
-		Map<String, String> login = new HashMap<>();
-		login.put("email", "fulano@qa.com");
-		login.put("password", "teste");
-		
-		String token = given()
-			.body(login)
-		.when()
-			.post("/login")
-		.then()
-			.statusCode(200)
-			.body("message", is("Login realizado com sucesso")).extract().path("token");
-
+				
 		// Inserindo um usuário com um email já cadastrado
 		given()
-			.header("authorization", "Bearer " + token)
+			.header("authorization", "Bearer " + TOKEN)
 			.body("{\r\n"
 					+ "  \"nome\": \"Vitor Tester Testador\",\r\n"
 					+ "  \"email\": \"vitorotesterABCDEF@qa.com\",\r\n"
@@ -150,6 +147,46 @@ public class ServeRestTest extends BaseTest {
 		.then()
 			.statusCode(400)
 			.body("message", is("Este email já está sendo usado"));
+			
+	}
+	
+	/**
+	 * Edit user account
+	 */
+	@Test
+	public void editUserAccount() {
+		// Buscando um usuário na lista
+		String _id = 
+		given()
+		.when()
+			.get("/usuarios")
+		.then()
+			.statusCode(200)
+			.extract().path("usuarios._id[1]");
+				
+		// Alterando os dados do usuário
+		given()
+			.header("authorization", "Bearer " + TOKEN)
+			.body("{\r\n"
+					+ "  \"nome\": \"Fulano do Teste123456\",\r\n"
+					+ "  \"email\": \"fulanotesterQA12345@qa.com\",\r\n"
+					+ "  \"password\": \"teste\",\r\n"
+					+ "  \"administrador\": \"true\"\r\n"
+					+ "}")
+		.when()
+			.put("/usuarios/" + _id)
+		.then()
+			.statusCode(200)
+			.body("message", is("Registro alterado com sucesso"));
+		
+		// Validando se a alteração foi realizada com sucesso e que o mesmo encontra-se na lista
+		given()
+		.when()
+			.get("/usuarios?_id=" + _id)
+		.then()
+			.statusCode(200)
+			.body("usuarios.nome", hasItem("Fulano do Teste123456"));
+			
 	}
 	
 }
