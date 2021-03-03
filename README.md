@@ -3,7 +3,7 @@ Automação de teste de API em Java com RestAssured utilizando o servidor Rest: 
 
 # Cenários de teste API: https://serverest.dev
 
-# Cenário 1: Autenticação Login:
+## Cenário 1: Autenticação Login:
  - credencial incorreta
  - credencial correta
  - Tentar acesso direto a API
