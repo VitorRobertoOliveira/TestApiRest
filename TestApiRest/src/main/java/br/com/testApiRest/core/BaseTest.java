@@ -1,13 +1,11 @@
 package br.com.testApiRest.core;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.specification.RequestSpecification;
 
 public class BaseTest implements Constant {
 	
