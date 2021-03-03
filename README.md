@@ -6,20 +6,27 @@ Automação de teste de API em Java com RestAssured utilizando o servidor Rest: 
 ## Cenário 1: Autenticação Login:
  - credencial incorreta
  - credencial correta
- - Tentar acesso direto a API
+ - Tentar acesso direto na API
 
 ## Cenário 2: Autenticação Conta Usuario:
  - cadastrar usuario e verificar se ele foi inserido
  - verificar se a lista de usuarios retorna vazia
  - validar o bloqueio de cadastro de usuario com mesmo email
  - editar conta usuario
+ - validar o bloqueio de edição de usuario com mesmo email
  - excluir conta usuario
 
 ## Cenário 3: Manipulando produtos:
  - cadastrar produto e verificar se foi inserido
  - verificar se a lista retorna vazia
+ - validar o bloqueio de cadastro de produto com mesmo nome
+ - validar o bloqueio de cadastro de produto sem token de autenticação
+ - validar o bloqueio de cadastro de produto com usuario sem permissão de admin
  - editar produto
+ - validar o bloqueio da edição de um produto com mesmo nome
+ - validar o bloqueio de edição de um produto sem token de autenticação
  - excluir produto
+ - validar o bloqueio de exclusão de um produto sem token de autenticação
 
 ## Cenário 4: Manipulando Carrinho
  - listar e verificar se retorna vazio
