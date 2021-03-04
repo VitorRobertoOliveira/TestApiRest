@@ -1,11 +1,13 @@
 # TestApiRest
 Automação de teste de API em Java com RestAssured utilizando o servidor Rest: serverest.dev - O ServeRest é um servidor REST que simula uma loja virtual com intuito de servir de material de estudos de testes de API.
 
-# Cenários de teste API: https://serverest.dev
-
 ## Configurações:
  - Dependências: rest-assured 4.0.0, junit 4.12
- - A estrutura do projeto comtém uma interface chamada "Constant.java" onde as contantes do projeto estão armazenadas, na "BaseTest.java" a configuração do projeto está definida na classe "setup()" e os métodos de teste estão no package= "tests". Para rodar o projeto é necessário executar cada classe de teste de forma indivudual.
+ - A estrutura do projeto contém uma interface chamada "Constant.java" onde as contantes do projeto estão armazenadas, na "BaseTest.java" a configuração do projeto está definida na classe "setup()" e os métodos de teste estão no package= "tests". Para rodar o projeto é necessário executar cada classe de teste de forma indivudual.
+ - Clonar o repositório através do link: https://github.com/VitorRobertoOliveira/TestApiRest.git
+ - Instalar o java 1.8 (jdk1.8.0_271)
+ - Instalar o Apache Maven 3.6.3
+ - IDE utilizada: Eclipse IDE - versão 2020-09
  
 ## Melhorias:
  - Criar um report para os tests
@@ -15,6 +17,8 @@ Automação de teste de API em Java com RestAssured utilizando o servidor Rest: 
 
 ## Observações:
  - Alguns métodos ficaram extensos devido a necessidade de se limpar a base após a execução para que não haja poluição da mesma, por se tratar de uma API aberta.
+
+# Cenários de teste API: https://serverest.dev
 
 ## Cenário 1: Autenticação Login:
  - credencial incorreta
